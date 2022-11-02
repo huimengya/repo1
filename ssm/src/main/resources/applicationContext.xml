@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="com.wyf.service"></context:component-scan>
+
+    <!--加载数据库配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"></context:property-placeholder>
+
+    <!--配置dataSource-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--配置数据库信息-->
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <!--把SqlSessionFactory交由spring创建，并生产sqlsession对象-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--类名别名配置-->
+        <property name="typeAliasesPackage" value="com.wyf.domain"></property>
+        <!--如果要加载mybatis的核心配置文件-->
+<!--        <property name="configLocation" value="classpath:SqlMapConfig.xml"></property>-->
+    </bean>
+
+    <!--将接口的代理对象交由spring-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描接口的映射配置-->
+        <property name="basePackage" value="com.wyf.dao"></property>
+    </bean>
+
+    <!--配置声明式事务-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--配置这个事务要管理的dataSource-->
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--开启事务注解的支持-->
+    <tx:annotation-driven></tx:annotation-driven>
+
+
+
+
+</beans>

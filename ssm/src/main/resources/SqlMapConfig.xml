@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--加载数据库配置文件-->
+    <properties resource="jdbc.properties"></properties>
+
+    <!--给实体类的路径起别名-->
+    <typeAliases>
+        <package name="com.wyf.domain"/>
+    </typeAliases>
+
+    <!--运行环境-->
+    <environments default="mysql">
+        <!--配置mysql环境-->
+        <environment id="mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED"><!--使用连接池-->
+                <!--配置连接数据库的信息-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--加载映射文件-->
+    <mappers>
+        <!--同包同名，加载接口的包即可-->
+        <package name="com.wyf.dao"/>
+    </mappers>
+
+</configuration>

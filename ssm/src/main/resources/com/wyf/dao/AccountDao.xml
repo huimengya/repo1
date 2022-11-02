@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.dao.AccountDao">
+    <select id="findAll" resultType="account">
+        select * from account
+    </select>
+
+    <!--添加用户-->
+    <insert id="save" parameterType="com.wyf.domain.Account">
+        insert into account (name,money) values (#{name},#{money})
+    </insert>
+
+    <!--根据id查询用户：实现数据回显Account findById(Integer id);-->
+    <select id="findById" parameterType="int" resultType="account">
+        select * from account where id = #{id}
+    </select>
+    
+    <!--修改用户信息 void update(Account account);-->
+    <update id="update" parameterType="account">
+        update account set name =#{name},money=#{money} where id=#{id}
+    </update>
+
+    <!--批量删除，where id in（1,2,3）void deleteBatch(Integer[] ids)-->
+    <delete id="deleteBatch" parameterType="int">
+        delete from account
+        <where>
+            <foreach collection="array" open="id in (" close=")" separator="," item="id">
+                #{id} /*通过占位符取出遍历的id*/
+            </foreach>
+        </where>
+    </delete>
+</mapper>
